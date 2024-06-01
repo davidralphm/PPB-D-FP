@@ -2,6 +2,10 @@
 
 A new Flutter project.
 
+## App template
+
+- [Highlights](https://github.com/TheAppWizard/Highlights-NewsApp)
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
