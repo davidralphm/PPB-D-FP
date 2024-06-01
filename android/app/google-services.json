@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "430887880099",
+    "project_id": "fir-auth-e480a",
+    "storage_bucket": "fir-auth-e480a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:430887880099:android:07115eac0e8c5899f50616",
+        "android_client_info": {
+          "package_name": "com.example.firebase_authentication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkt_WPFT1cAoMTdE-5jJJw4yWDVXcmliw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:430887880099:android:729f50f95d11e230f50616",
+        "android_client_info": {
+          "package_name": "com.example.highlights"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkt_WPFT1cAoMTdE-5jJJw4yWDVXcmliw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
