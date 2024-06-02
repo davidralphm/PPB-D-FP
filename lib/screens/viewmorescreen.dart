@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:highlights/screens/authscreen.dart';
+import 'package:highlights/services/firestore.dart';
 import 'package:highlights/widgets/news_widget.dart';
 import 'package:http/http.dart' as http;
 import 'package:webfeed_plus/webfeed_plus.dart';
@@ -20,6 +22,7 @@ class ViewMore extends StatefulWidget {
 
 class _ViewMoreState extends State<ViewMore> {
   RssFeed? feed;
+  late List favList = [];
 
   @override
   void initState() {
@@ -28,6 +31,8 @@ class _ViewMoreState extends State<ViewMore> {
   }
 
   Future<void> loadFeed() async {
+    favList = await FirestoreService().getFavoritesList();
+
     var response = await http.get(Uri.parse(widget.getURL));
     if (response.statusCode == 200) {
       setState(() {
@@ -45,7 +50,7 @@ class _ViewMoreState extends State<ViewMore> {
         backgroundColor: AppColors.primaryColor,
         leading: IconButton(
           icon: const Icon(Icons.chevron_left), onPressed: () {
-          Navigator.pop(context);
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AuthScreen()));
         },
         ),
         title:  AppText(
@@ -72,7 +77,7 @@ class _ViewMoreState extends State<ViewMore> {
                 publishDate: item?.pubDate?.toString() ?? "",
                 author: item?.source?.url.toString() ?? "",
                 link: item?.link?.toString() ?? "",
-                bookmarked: false,
+                bookmarked: favList.contains(item?.link)
               );
           },
         ),

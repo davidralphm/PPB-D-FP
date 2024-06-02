@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:highlights/screens/homescreen.dart';
 import '../utils/appcolors.dart';
 import '../widgets/apptext.dart';
 import '../widgets/expanded_button_widget.dart';

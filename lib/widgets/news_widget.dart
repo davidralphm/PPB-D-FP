@@ -8,7 +8,7 @@ import '../utils/helper/date_functions.dart';
 import 'apptext.dart';
 import 'news_webview.dart';
 
-class NewsWidget extends StatelessWidget {
+class NewsWidget extends StatefulWidget {
   final String title;
   final String subtitle;
   final String publishDate;
@@ -26,7 +26,21 @@ class NewsWidget extends StatelessWidget {
   });
 
   @override
+  State<NewsWidget> createState() => _NewsWidgetState();
+}
+
+class _NewsWidgetState extends State<NewsWidget> {
+  bool isBookmarked = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    isBookmarked = widget.bookmarked;
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
@@ -49,7 +63,7 @@ class NewsWidget extends StatelessWidget {
                 // ),
 
                 AppText(
-                  text: title,
+                  text: widget.title,
                   fontSize: 16.0,
                   color: Colors.black,
                   maxLines: 4,
@@ -67,7 +81,7 @@ class NewsWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         AppText(
-                          text:  convertToRegularDateFormat(publishDate),
+                          text:  convertToRegularDateFormat(widget.publishDate),
                           fontSize: 12.0,
                           color: AppColors.blackColor.withOpacity(0.5),
                           fontWeight: FontWeight.normal,
@@ -83,7 +97,7 @@ class NewsWidget extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                             ),
                             AppText(
-                              text:  removeHttpsAndCom(author),
+                              text:  removeHttpsAndCom(widget.author),
                               fontSize: 12.0,
                               color: AppColors.blackColor.withOpacity(1),
                               fontWeight: FontWeight.normal,
@@ -96,16 +110,20 @@ class NewsWidget extends StatelessWidget {
                     const Spacer(),
 
                     IconButton(
-                      onPressed: () async {
-                        if (bookmarked) {
-                          FirestoreService().deleteFavorite(link);
+                      onPressed: () {
+                        if (isBookmarked) {
+                          FirestoreService().deleteFavorite(widget.link);
                         } else {
-                          FirestoreService().addFavorite(link);
+                          FirestoreService().addFavorite(widget.link);
                         }
+
+                        setState(() {
+                          isBookmarked = !isBookmarked;
+                        });
                       },
 
                       icon: Icon(
-                        (bookmarked == true ? Icons.bookmark : Icons.bookmark_outline)
+                        (isBookmarked == true) ? Icons.bookmark : Icons.bookmark_outline
                       ),
                     ),
 
@@ -121,7 +139,7 @@ class NewsWidget extends StatelessWidget {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => NewsWebviewApp(newsURL: link,)),
+                            MaterialPageRoute(builder: (context) => NewsWebviewApp(newsURL: widget.link,)),
                           );
                         },
                         child: const AppText(

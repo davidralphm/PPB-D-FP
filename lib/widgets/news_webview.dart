@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:highlights/screens/authscreen.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../utils/appcolors.dart';
@@ -33,6 +34,7 @@ class _NewsWebviewAppState extends State<NewsWebviewApp> {
         leading: IconButton(
           icon: const Icon(Icons.chevron_left), onPressed: () {
             Navigator.pop(context);
+            // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AuthScreen()));
         },
         ),
         title: const AppText(

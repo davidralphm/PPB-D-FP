@@ -5,13 +5,13 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:highlights/screens/favoritesscreen.dart';
 import 'package:highlights/screens/profilescreen.dart';
-import 'package:highlights/services/firestore.dart';
+// import 'package:highlights/services/firestore.dart';
 import 'package:highlights/utils/appcolors.dart';
-import 'package:highlights/widgets/news_widget.dart';
-import 'package:http/http.dart' as http;
-import 'package:webfeed_plus/webfeed_plus.dart';
+// import 'package:highlights/widgets/news_widget.dart';
+// import 'package:http/http.dart' as http;
+// import 'package:webfeed_plus/webfeed_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:webfeed_plus/domain/rss_feed.dart';
+// import 'package:webfeed_plus/domain/rss_feed.dart';
 
 import '../utils/onboarding_util/topics.dart';
 import '../widgets/apptext.dart';
@@ -59,11 +59,13 @@ class _HomeScreenState extends State<HomeScreen> {
             actions: [
               IconButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const FavoritesScreen()),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //       builder: (context) => const FavoritesScreen()),
+                    // );
+
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FavoritesScreen()));
                   },
                   icon: const Icon(
                     Icons.bookmark_outline,
@@ -72,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               IconButton(
                   onPressed: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                           builder: (context) => ProfileScreen()),
@@ -121,9 +123,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
               ),
-              HomeSectionTab(topic: "$tabName",),
-              const HomeSectionCountry(),
-              const HomeSectionGeo(),
+              HomeSectionTab(topic: "$tabName"),
+              // const HomeSectionCountry(),
+              // const HomeSectionGeo(),
             ],
           ))),
     );

@@ -1,11 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:highlights/screens/authscreen.dart';
-import 'package:highlights/screens/splashscreen.dart';
-import 'package:highlights/utils/helper/data_functions.dart';
 
 import '../utils/appcolors.dart';
-import '../utils/appconstants.dart';
 import '../widgets/apptext.dart';
 import '../widgets/expanded_button_widget.dart';
 import '../widgets/profilecard_widget.dart';
@@ -32,7 +29,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         backgroundColor: AppColors.primaryColor,
         leading: IconButton(
           icon: const Icon(Icons.chevron_left), onPressed: () {
-          Navigator.pop(context);
+          // Navigator.pop(context);
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AuthScreen()));
         },
         ),
         title: const AppText(
@@ -103,7 +101,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               buttonColor: AppColors.errorColor.withOpacity(1),
               onPressed: () async {
                 FirebaseAuth.instance.signOut();
-                Navigator.pop(context);
+                // Navigator.pop(context);
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AuthScreen()));
               },
               child: const AppText(
                 text: "Logout",

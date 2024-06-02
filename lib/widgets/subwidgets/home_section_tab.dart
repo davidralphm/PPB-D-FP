@@ -14,7 +14,9 @@ import '../apptext.dart';
 
 class HomeSectionTab extends StatefulWidget {
   final String topic;
-  const HomeSectionTab({super.key, required this.topic});
+  late List favList = [];
+
+  HomeSectionTab({super.key, required this.topic});
 
   @override
   _HomeSectionTabState createState() => _HomeSectionTabState();
@@ -22,12 +24,13 @@ class HomeSectionTab extends StatefulWidget {
 
 class _HomeSectionTabState extends State<HomeSectionTab> {
   RssFeed? feed;
-  late List favList;
 
   Future<void> loadFeed() async {
+    widget.favList = await FirestoreService().getFavoritesList();
+
     try {
       var response = await http.get(Uri.parse("https://news.google.com/rss/headlines/section/topic/${widget.topic.toUpperCase()}?ceid=US:EN&hl=en&gl=US"));
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && mounted) {
         setState(() {
           feed = RssFeed.parse(response.body);
         });
@@ -37,10 +40,7 @@ class _HomeSectionTabState extends State<HomeSectionTab> {
     } catch (e,s) {
       print('Error loading RSS feed: $e');
       print('Stack loading RSS feed: $s');
-
     }
-
-    favList = await FirestoreService().getFavoritesList();
   }
 
   @override
@@ -79,13 +79,15 @@ class _HomeSectionTabState extends State<HomeSectionTab> {
                 itemCount: 4,
                 itemBuilder: (context, index) {
                   var item = feed!.items?[index];
+                  bool isBookmarked = widget.favList.contains(item?.link);
+
                   return NewsWidget(
                       title: item?.title ?? '',
                       subtitle: "",
                       publishDate: item?.pubDate?.toString() ?? "",
                       author: item?.source?.url.toString() ?? "",
                       link: item?.link?.toString() ?? "",
-                      bookmarked: false,
+                      bookmarked: isBookmarked
                     );
                 },
               ),
@@ -99,7 +101,7 @@ class _HomeSectionTabState extends State<HomeSectionTab> {
               padding: const EdgeInsets.all(15.0),
               child: InkWell(
                 onTap: (){
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) =>  ViewMore(getURL: "https://news.google.com/rss/headlines/section/topic/${widget.topic.toUpperCase()}?ceid=US:EN&hl=en&gl=US",name: convertToSpaces(widget.topic),)),
