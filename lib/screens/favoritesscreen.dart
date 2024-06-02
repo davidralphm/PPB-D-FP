@@ -28,9 +28,6 @@ class FavoritesScreen extends StatefulWidget {
 }
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
-  int _selectedItemIndex = 0;
-  String tabName = "World";
-
   @override
   void initState() {
     super.initState();
@@ -45,9 +42,19 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         return false;
       },
       child: Scaffold(
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              FirestoreService().addFavorite('asda');
+            },
+
+            child: const Icon(Icons.add),
+          ),
           backgroundColor: AppColors.whiteColor,
           appBar: AppBar(
-            leading: const Text(""),
+            leading: IconButton(
+                icon: const Icon(Icons.chevron_left), onPressed: () {
+                Navigator.pop(context);
+              }),
             backgroundColor: AppColors.primaryColor,
             title: const AppText(
               text: "H I G H L I G H T S",
@@ -79,6 +86,12 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 
                     List favList = doc['url'];
 
+                    if (favList.isEmpty) {
+                      return const Center(
+                        child: Text('No items', style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold)),
+                      );
+                    }
+
                     return ListView.builder(
                     itemCount: favList.length,
                     itemBuilder: (context, index) {
@@ -89,14 +102,16 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            IconButton(onPressed: () => { FirestoreService().updateFavorite(url, 'asd') }, icon: Icon(Icons.settings))
+                            IconButton(onPressed: () => { FirestoreService().deleteFavorite(url) }, icon: const Icon(Icons.delete))
                           ],
                         )
                         );
                       },
                     );
                   } catch(e) {
-                    return const Text('No items');
+                    return const Center(
+                      child: Text('No items', style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold)),
+                    );
                   }
                 },
               )

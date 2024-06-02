@@ -6,44 +6,83 @@ class FirestoreService {
   final CollectionReference favorites =  FirebaseFirestore.instance.collection('favorites');
 
   // Get current user
-  final user = FirebaseAuth.instance.currentUser!;
+  final user = FirebaseAuth.instance.currentUser;
 
   // CREATE
-  Future<void> addFavorite(String url) {
-    return favorites.add({
-      'url': url,
-      'timestamp': Timestamp.now()
-    });
+  Future<void> addFavorite(String url) async {
+    final doc = await favorites.doc(user?.uid).get();
+    List favList = [];
+
+    try {
+      final data = doc.data() as Map<String, dynamic>;
+      favList = data['url'];
+    } catch (e) {
+      print(e.toString());
+    }
+
+    favList.add(url);
+
+    Map<String, dynamic> newData = {
+      'url': favList
+    };
+
+    return favorites.doc(user?.uid).set(newData);
   }
 
   // READ
   Stream<DocumentSnapshot> getFavoritesStream() {
-    // final favStream = favorites.orderBy('timestamp', descending: true).snapshots();
-    // final favStream = favorites.where('documentId', isEqualTo: user.uid).orderBy('timestamp', descending: false).snapshots();
-    // final favStream = favorites.where('docid', isEqualTo: user.uid).snapshots();
-    final favStream = favorites.doc(user.uid).snapshots();
+    final favStream = favorites.doc(user?.uid).snapshots();
 
     return favStream;
   }
 
-  // UPDATE
-  Future<void> updateFavorite(String url, String newUrl) async {
-    final doc = await favorites.doc(user.uid).get();
-    final data = doc.data() as Map<String, dynamic>;
+  Future<List> getFavoritesList() async {
+    List favList = [];
 
-    print(data);
+    final doc = await favorites.doc(user?.uid).get();
 
-    List favList = data['url'];
-    favList.add('edit${Timestamp.now()}');
+    try {
+      final data = doc.data() as Map<String, dynamic>;
+      favList = data['url'];
+    } catch (e) {
 
-    return favorites.doc(user.uid).update({
-      'url': favList,
-      'timestamp': Timestamp.now()
-    });
+    }
+
+    return favList;
   }
 
+  // // UPDATE
+  // Future<void> updateFavorite(String url, String newUrl) async {
+  //   final doc = await favorites.doc(user?.uid).get();
+  //   final data = doc.data() as Map<String, dynamic>;
+
+  //   List favList = data['url'];
+  //   favList.add('edit${Timestamp.now()}');
+
+  //   return favorites.doc(user?.uid).update({
+  //     'url': favList,
+  //     'timestamp': Timestamp.now()
+  //   });
+  // }
+
   // DELETE
-  Future<void> deleteNote(String docID) {
-    return favorites.doc(docID).delete();
+  Future<void> deleteFavorite(String url) async {
+    final doc = await favorites.doc(user?.uid).get();
+    List favList = [];
+
+    try {
+      final data = doc.data() as Map<String, dynamic>;
+      favList = data['url'];
+    } catch (e) {
+      print(e.toString());
+    }
+
+    favList.remove(url);
+
+    Map<String, dynamic> newData = {
+      'url': favList
+    };
+
+    return favorites.doc(user?.uid).set(newData);
   }
 }

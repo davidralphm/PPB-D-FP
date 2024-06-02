@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:highlights/screens/viewmorescreen.dart';
+import 'package:highlights/services/firestore.dart';
 import 'package:highlights/widgets/news_widget.dart';
 import 'package:http/http.dart' as http;
 import 'package:webfeed_plus/webfeed_plus.dart';
@@ -20,6 +22,7 @@ class HomeSectionTab extends StatefulWidget {
 
 class _HomeSectionTabState extends State<HomeSectionTab> {
   RssFeed? feed;
+  late List favList;
 
   Future<void> loadFeed() async {
     try {
@@ -36,6 +39,8 @@ class _HomeSectionTabState extends State<HomeSectionTab> {
       print('Stack loading RSS feed: $s');
 
     }
+
+    favList = await FirestoreService().getFavoritesList();
   }
 
   @override
@@ -64,14 +69,14 @@ class _HomeSectionTabState extends State<HomeSectionTab> {
         ),
         SizedBox(
           child: feed == null
-              ? const Center(
+              ? Center(
             child: CupertinoActivityIndicator(),
           )
               : ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 //  itemCount: feed!.items?.length,
-                itemCount: 2,
+                itemCount: 4,
                 itemBuilder: (context, index) {
                   var item = feed!.items?[index];
                   return NewsWidget(
@@ -79,7 +84,9 @@ class _HomeSectionTabState extends State<HomeSectionTab> {
                       subtitle: "",
                       publishDate: item?.pubDate?.toString() ?? "",
                       author: item?.source?.url.toString() ?? "",
-                      link: item?.link?.toString() ?? "");
+                      link: item?.link?.toString() ?? "",
+                      bookmarked: false,
+                    );
                 },
               ),
         ),

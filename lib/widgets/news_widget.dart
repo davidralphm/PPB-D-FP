@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:highlights/services/firestore.dart';
 import 'package:highlights/utils/appcolors.dart';
 
 import '../utils/helper/author_function.dart';
@@ -13,13 +14,15 @@ class NewsWidget extends StatelessWidget {
   final String publishDate;
   final String author;
   final String link;
+  final bool bookmarked;
 
-  NewsWidget({
+  const NewsWidget({
     required this.title,
     required this.subtitle,
     required this.publishDate,
     required this.author,
     required this.link,
+    required this.bookmarked
   });
 
   @override
@@ -91,6 +94,21 @@ class NewsWidget extends StatelessWidget {
                       ],
                     ),
                     const Spacer(),
+
+                    IconButton(
+                      onPressed: () async {
+                        if (bookmarked) {
+                          FirestoreService().deleteFavorite(link);
+                        } else {
+                          FirestoreService().addFavorite(link);
+                        }
+                      },
+
+                      icon: Icon(
+                        (bookmarked == true ? Icons.bookmark : Icons.bookmark_outline)
+                      ),
+                    ),
+
                     Container(
                       width: 100, // Width of the oval button
                       height: 30, // Height of the oval button

@@ -3,6 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:highlights/screens/favoritesscreen.dart';
 import 'package:highlights/screens/profilescreen.dart';
 import 'package:highlights/services/firestore.dart';
 import 'package:highlights/utils/appcolors.dart';
@@ -61,13 +62,26 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
+                          builder: (context) => const FavoritesScreen()),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.bookmark_outline,
+                    color: AppColors.blackColor,
+                  )),
+
+              IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
                           builder: (context) => ProfileScreen()),
                     );
                   },
                   icon: const Icon(
                     Icons.account_circle_outlined,
                     color: AppColors.blackColor,
-                  ))
+                  )),
             ],
           ),
           body: SingleChildScrollView(

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:highlights/screens/authscreen.dart';
 import 'package:highlights/screens/splashscreen.dart';
 import 'package:highlights/utils/helper/data_functions.dart';
 
@@ -50,13 +51,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           const Divider(),
            ListTile(
             title: AppText(
-              text: "Username",
+              text: "Email",
               fontSize: 14.0,
               color: AppColors.blackColor.withOpacity(0.6),
               overflow: TextOverflow.ellipsis,
             ),
             subtitle: AppText(
-              text: "asdasd ${widget.user.email}",
+              text: "${widget.user.email}",
               fontSize: 20.0,
               color: AppColors.blackColor,
               overflow: TextOverflow.ellipsis,
@@ -101,8 +102,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: ExpandedButton(
               buttonColor: AppColors.errorColor.withOpacity(1),
               onPressed: () async {
-                // print('Button Pressed!');
-
                 FirebaseAuth.instance.signOut();
                 Navigator.pop(context);
               },

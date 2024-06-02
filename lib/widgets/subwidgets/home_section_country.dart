@@ -112,7 +112,9 @@ class _HomeSectionCountryState extends State<HomeSectionCountry> {
                         subtitle: "",
                         publishDate: item?.pubDate?.toString() ?? "",
                         author: item?.source?.url.toString() ?? "",
-                        link: item?.link?.toString() ?? "");
+                        link: item?.link?.toString() ?? "",
+                        bookmarked: false,
+                      );
                   },
                 ),
         ),
