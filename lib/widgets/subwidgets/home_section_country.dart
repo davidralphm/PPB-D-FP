@@ -114,6 +114,7 @@ class _HomeSectionCountryState extends State<HomeSectionCountry> {
                         author: item?.source?.url.toString() ?? "",
                         link: item?.link?.toString() ?? "",
                         bookmarked: false,
+                        guid: '',
                       );
                   },
                 ),

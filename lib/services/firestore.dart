@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:highlights/widgets/news_widget.dart';
 
 class FirestoreService {
   // Get collection of notes from database
@@ -9,24 +10,29 @@ class FirestoreService {
   final user = FirebaseAuth.instance.currentUser;
 
   // CREATE
-  Future<void> addFavorite(String url) async {
+  Future<void> addFavorite(NewsWidget widget) async {
     final doc = await favorites.doc(user?.uid).get();
-    List favList = [];
+    Map<String, dynamic> favList = {};
 
     try {
-      final data = doc.data() as Map<String, dynamic>;
-      favList = data['url'];
+      favList = doc.data() as Map<String, dynamic>;
+      // final data = doc.data() as Map<String, dynamic>;
+      // favList = data['url'];
     } catch (e) {
       print(e.toString());
     }
 
-    favList.add(url);
-
     Map<String, dynamic> newData = {
-      'url': favList
+      'title': widget.title,
+      'subtitle': widget.subtitle,
+      'publishDate': widget.publishDate,
+      'author': widget.author,
+      'link': widget.link
     };
 
-    return favorites.doc(user?.uid).set(newData);
+    favList[widget.guid] = newData;
+
+    return favorites.doc(user?.uid).set(favList);
   }
 
   // READ
@@ -36,14 +42,15 @@ class FirestoreService {
     return favStream;
   }
 
-  Future<List> getFavoritesList() async {
-    List favList = [];
+  Future<Map<String, dynamic>> getFavoritesList() async {
+    Map<String, dynamic> favList = {};
 
     final doc = await favorites.doc(user?.uid).get();
 
     try {
-      final data = doc.data() as Map<String, dynamic>;
-      favList = data['url'];
+      favList = doc.data() as Map<String, dynamic>;
+      // final data = doc.data() as Map<String, dynamic>;
+      // favList = data['url'];
     } catch (e) {
 
     }
@@ -66,23 +73,22 @@ class FirestoreService {
   // }
 
   // DELETE
-  Future<void> deleteFavorite(String url) async {
+  Future<void> deleteFavorite(NewsWidget widget) async {
     final doc = await favorites.doc(user?.uid).get();
-    List favList = [];
+    Map<String, dynamic> favList = {};
 
     try {
-      final data = doc.data() as Map<String, dynamic>;
-      favList = data['url'];
+      favList = doc.data() as Map<String, dynamic>;
+      // final data = doc.data() as Map<String, dynamic>;
+      // favList = data['url'];
     } catch (e) {
       print(e.toString());
     }
 
-    favList.remove(url);
+    favList.remove(widget.guid);
 
-    Map<String, dynamic> newData = {
-      'url': favList
-    };
+    print('Removing ${widget.guid}');
 
-    return favorites.doc(user?.uid).set(newData);
+    return favorites.doc(user?.uid).set(favList);
   }
 }

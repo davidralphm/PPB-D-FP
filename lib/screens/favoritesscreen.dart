@@ -26,13 +26,6 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         return false;
       },
       child: Scaffold(
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              FirestoreService().addFavorite('asda');
-            },
-
-            child: const Icon(Icons.add),
-          ),
           backgroundColor: AppColors.whiteColor,
           appBar: AppBar(
             leading: IconButton(
@@ -53,31 +46,34 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                 stream: FirestoreService().getFavoritesStream(),
                 builder: (context, snapshot) {
                   try {
-                    final doc = snapshot.data!.data() as Map<String, dynamic>;
+                    final favList = snapshot.data!.data() as Map<String, dynamic>;
+                    List list = [];
 
-                    List favList = doc['url'];
+                    print(favList);
 
-                    if (favList.isEmpty) {
+                    favList.forEach((key, value) {
+                      value['guid'] = key;
+                      list.add(value);
+                    });
+
+                    if (list.isEmpty) {
                       return const Center(
                         child: Text('No items', style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold)),
                       );
                     }
 
                     return ListView.builder(
-                    itemCount: favList.length,
+                    itemCount: list.length,
                     itemBuilder: (context, index) {
-                      String url = favList[index];
-
-                      return NewsWidget(title: 'asd', subtitle: 'asd', publishDate: '2020-10-10 10:10:10', author: 'asd', link: url, bookmarked: true);
-                      // return ListTile(
-                      //   title: Text(url),
-                      //   trailing: Row(
-                      //     mainAxisSize: MainAxisSize.min,
-                      //     children: [
-                      //       IconButton(onPressed: () => { FirestoreService().deleteFavorite(url) }, icon: const Icon(Icons.delete))
-                      //     ],
-                      //   )
-                      //   );
+                      return NewsWidget(
+                        title: list[index]['title'],
+                        subtitle: list[index]['subtitle'],
+                        publishDate: list[index]['publishDate'],
+                        author: list[index]['author'],
+                        link: list[index]['link'],
+                        bookmarked: true,
+                        guid: list[index]['guid'],
+                      );
                       },
                     );
                   } catch(e) {

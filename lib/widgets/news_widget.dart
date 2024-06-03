@@ -15,6 +15,7 @@ class NewsWidget extends StatefulWidget {
   final String author;
   final String link;
   final bool bookmarked;
+  final String guid;
 
   const NewsWidget({
     required this.title,
@@ -22,7 +23,8 @@ class NewsWidget extends StatefulWidget {
     required this.publishDate,
     required this.author,
     required this.link,
-    required this.bookmarked
+    required this.bookmarked,
+    required this.guid
   });
 
   @override
@@ -112,9 +114,9 @@ class _NewsWidgetState extends State<NewsWidget> {
                     IconButton(
                       onPressed: () {
                         if (isBookmarked) {
-                          FirestoreService().deleteFavorite(widget.link);
+                          FirestoreService().deleteFavorite(widget);
                         } else {
-                          FirestoreService().addFavorite(widget.link);
+                          FirestoreService().addFavorite(widget);
                         }
 
                         setState(() {

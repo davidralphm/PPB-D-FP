@@ -22,7 +22,7 @@ class ViewMore extends StatefulWidget {
 
 class _ViewMoreState extends State<ViewMore> {
   RssFeed? feed;
-  late List favList = [];
+  late Map<String, dynamic> favList = {};
 
   @override
   void initState() {
@@ -77,7 +77,8 @@ class _ViewMoreState extends State<ViewMore> {
                 publishDate: item?.pubDate?.toString() ?? "",
                 author: item?.source?.url.toString() ?? "",
                 link: item?.link?.toString() ?? "",
-                bookmarked: favList.contains(item?.link)
+                bookmarked: favList.containsKey(item?.guid),
+                guid: item?.guid ?? "",
               );
           },
         ),

@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:highlights/screens/viewmorescreen.dart';
 import 'package:highlights/services/firestore.dart';
@@ -14,7 +13,6 @@ import '../apptext.dart';
 
 class HomeSectionTab extends StatefulWidget {
   final String topic;
-  late List favList = [];
 
   HomeSectionTab({super.key, required this.topic});
 
@@ -24,9 +22,10 @@ class HomeSectionTab extends StatefulWidget {
 
 class _HomeSectionTabState extends State<HomeSectionTab> {
   RssFeed? feed;
+  late Map<String, dynamic> favList = {};
 
   Future<void> loadFeed() async {
-    widget.favList = await FirestoreService().getFavoritesList();
+    favList = await FirestoreService().getFavoritesList();
 
     try {
       var response = await http.get(Uri.parse("https://news.google.com/rss/headlines/section/topic/${widget.topic.toUpperCase()}?ceid=US:EN&hl=en&gl=US"));
@@ -79,7 +78,7 @@ class _HomeSectionTabState extends State<HomeSectionTab> {
                 itemCount: 4,
                 itemBuilder: (context, index) {
                   var item = feed!.items?[index];
-                  bool isBookmarked = widget.favList.contains(item?.link);
+                  bool isBookmarked = favList.containsKey(item?.guid);
 
                   return NewsWidget(
                       title: item?.title ?? '',
@@ -87,7 +86,8 @@ class _HomeSectionTabState extends State<HomeSectionTab> {
                       publishDate: item?.pubDate?.toString() ?? "",
                       author: item?.source?.url.toString() ?? "",
                       link: item?.link?.toString() ?? "",
-                      bookmarked: isBookmarked
+                      bookmarked: isBookmarked,
+                      guid: item?.guid ?? "",
                     );
                 },
               ),

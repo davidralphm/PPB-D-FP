@@ -79,6 +79,7 @@ class _HomeSectionGeoState extends State<HomeSectionGeo> {
                       author: item?.source?.url.toString() ?? "",
                       link: item?.link?.toString() ?? "",
                       bookmarked: false,
+                      guid: '',
                     );
                 },
               ),
