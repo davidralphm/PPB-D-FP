@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:highlights/screens/authscreen.dart';
 import 'package:highlights/services/firestore.dart';
-import 'package:highlights/widgets/news_widget.dart';
+import 'package:highlights/widgets/news_widget_stateful.dart';
 import 'package:http/http.dart' as http;
 import 'package:webfeed_plus/webfeed_plus.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +50,8 @@ class _ViewMoreState extends State<ViewMore> {
         backgroundColor: AppColors.primaryColor,
         leading: IconButton(
           icon: const Icon(Icons.chevron_left), onPressed: () {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AuthScreen()));
+            Navigator.pop(context);
+            // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AuthScreen()));
         },
         ),
         title:  AppText(
@@ -71,7 +72,7 @@ class _ViewMoreState extends State<ViewMore> {
           // itemCount: 2,
           itemBuilder: (context, index) {
             var item = feed!.items?[index];
-            return NewsWidget(
+            return NewsWidgetStateful(
                 title: item?.title ?? '',
                 subtitle: "",
                 publishDate: item?.pubDate?.toString() ?? "",

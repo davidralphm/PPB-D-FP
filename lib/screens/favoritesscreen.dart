@@ -30,8 +30,8 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           appBar: AppBar(
             leading: IconButton(
                 icon: const Icon(Icons.chevron_left), onPressed: () {
-                // Navigator.pop(context);
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const AuthScreen()));
+                Navigator.pop(context);
+                // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const AuthScreen()));
               }),
             backgroundColor: AppColors.primaryColor,
             title: const AppText(

@@ -101,7 +101,7 @@ class _HomeSectionTabState extends State<HomeSectionTab> {
               padding: const EdgeInsets.all(15.0),
               child: InkWell(
                 onTap: (){
-                  Navigator.pushReplacement(
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) =>  ViewMore(getURL: "https://news.google.com/rss/headlines/section/topic/${widget.topic.toUpperCase()}?ceid=US:EN&hl=en&gl=US",name: convertToSpaces(widget.topic),)),
