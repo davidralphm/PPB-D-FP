@@ -5,7 +5,10 @@ class FirestoreService {
   // Get collection of favorites and comments from database
   final CollectionReference favorites =  FirebaseFirestore.instance.collection('favorites');
   final CollectionReference comments = FirebaseFirestore.instance.collection('comments');
+<<<<<<< HEAD
   final CollectionReference history = FirebaseFirestore.instance.collection('history');
+=======
+>>>>>>> d1c1e62fcb2b314eb15a2f7926c8faaee44178f1
 
   // Get current user
   final user = FirebaseAuth.instance.currentUser;
@@ -54,6 +57,7 @@ class FirestoreService {
     return favorites.doc(user?.uid).set(favList);
   }
 
+<<<<<<< HEAD
   // CREATE HISTORY
   Future<void> addHistory(
     String title,
@@ -85,6 +89,8 @@ class FirestoreService {
     return history.doc(user?.uid).set(historyList);
   }
 
+=======
+>>>>>>> d1c1e62fcb2b314eb15a2f7926c8faaee44178f1
   // READ COMMENTS
   Stream<QuerySnapshot> getCommentsStream(String newsGuid) {
     final commentStream = comments.where('newsGuid', isEqualTo: newsGuid).orderBy('timestamp').snapshots();
@@ -113,6 +119,7 @@ class FirestoreService {
     return favList;
   }
 
+<<<<<<< HEAD
   // READ HISTORY
   Stream<DocumentSnapshot> getHistoryStream() {
     final historyStream = history.doc(user?.uid).snapshots();
@@ -134,6 +141,22 @@ class FirestoreService {
     return comments.doc(docId).delete();
   }
 
+=======
+  // UPDATE COMMENT
+  Future<void> updateComment(String docId, String comment) {
+    final Map<String, dynamic> newData = {
+      'comment': comment,
+    };
+
+    return comments.doc(docId).update(newData);
+  }
+
+  // DELETE COMMENT
+  Future<void> deleteComment(String docId) {
+    return comments.doc(docId).delete();
+  }
+
+>>>>>>> d1c1e62fcb2b314eb15a2f7926c8faaee44178f1
   // DELETE FAVORITE
   Future<void> deleteFavorite(String guid) async {
     final doc = await favorites.doc(user?.uid).get();
@@ -149,7 +172,11 @@ class FirestoreService {
 
     favList.remove(guid);
 
+<<<<<<< HEAD
     // print('Removing $guid');
+=======
+    print('Removing $guid');
+>>>>>>> d1c1e62fcb2b314eb15a2f7926c8faaee44178f1
 
     return favorites.doc(user?.uid).set(favList);
   }

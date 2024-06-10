@@ -156,6 +156,7 @@ class _NewsWidgetStatefulState extends State<NewsWidgetStateful> {
                       ),
                       child: TextButton(
                         onPressed: () {
+<<<<<<< HEAD
                           // Add item to news history
                           FirestoreService().addHistory(
                             widget.title,
@@ -166,6 +167,8 @@ class _NewsWidgetStatefulState extends State<NewsWidgetStateful> {
                             widget.guid
                           );
 
+=======
+>>>>>>> d1c1e62fcb2b314eb15a2f7926c8faaee44178f1
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => NewsWebviewApp(newsURL: widget.link,)),
