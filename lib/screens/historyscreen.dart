@@ -3,18 +3,26 @@ import 'package:highlights/services/firestore.dart';
 import 'package:highlights/utils/appcolors.dart';
 import 'package:flutter/material.dart';
 import 'package:highlights/widgets/news_widget.dart';
+import 'package:highlights/widgets/news_widget_stateful.dart';
 import '../widgets/apptext.dart';
 
-class FavoritesScreen extends StatefulWidget {
-  const FavoritesScreen({super.key});
+class HistoryScreen extends StatefulWidget {
+  const HistoryScreen({super.key});
 
   @override
-  _FavoritesScreenState createState() => _FavoritesScreenState();
+  _HistoryScreenState createState() => _HistoryScreenState();
 }
 
-class _FavoritesScreenState extends State<FavoritesScreen> {
+class _HistoryScreenState extends State<HistoryScreen> {
+  Map<String, dynamic> favList = {};
+
+  void loadFavList() async {
+    favList = await FirestoreService().getFavoritesList();
+  }
+
   @override
   void initState() {
+    loadFavList();
     super.initState();
   }
 
@@ -30,11 +38,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             leading: IconButton(
                 icon: const Icon(Icons.chevron_left), onPressed: () {
                 Navigator.pop(context);
-                // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const AuthScreen()));
               }),
             backgroundColor: AppColors.primaryColor,
             title: const AppText(
-              text: "F A V O R I T E S",
+              text: "N E W S   H I S T O R Y",
               fontSize: 18.0,
               color: AppColors.blackColor,
               overflow: TextOverflow.ellipsis,
@@ -42,15 +49,13 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           ),
           body: 
               StreamBuilder<DocumentSnapshot>(
-                stream: FirestoreService().getFavoritesStream(),
+                stream: FirestoreService().getHistoryStream(),
                 builder: (context, snapshot) {
                   try {
-                    final favList = snapshot.data!.data() as Map<String, dynamic>;
+                    final historyList = snapshot.data!.data() as Map<String, dynamic>;
                     List list = [];
 
-                    print(favList);
-
-                    favList.forEach((key, value) {
+                    historyList.forEach((key, value) {
                       value['guid'] = key;
                       list.add(value);
                     });
@@ -64,13 +69,13 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                     return ListView.builder(
                     itemCount: list.length,
                     itemBuilder: (context, index) {
-                      return NewsWidget(
+                      return NewsWidgetStateful(
                         title: list[index]['title'],
                         subtitle: list[index]['subtitle'],
                         publishDate: list[index]['publishDate'],
                         author: list[index]['author'],
                         link: list[index]['link'],
-                        bookmarked: true,
+                        bookmarked: favList.containsKey(list[index]['guid']),
                         guid: list[index]['guid'],
                       );
                       },

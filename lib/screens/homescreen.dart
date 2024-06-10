@@ -1,23 +1,12 @@
-
-
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:highlights/screens/favoritesscreen.dart';
+import 'package:highlights/screens/historyscreen.dart';
 import 'package:highlights/screens/profilescreen.dart';
-// import 'package:highlights/services/firestore.dart';
 import 'package:highlights/utils/appcolors.dart';
-// import 'package:highlights/widgets/news_widget.dart';
-// import 'package:http/http.dart' as http;
-// import 'package:webfeed_plus/webfeed_plus.dart';
 import 'package:flutter/material.dart';
-// import 'package:webfeed_plus/domain/rss_feed.dart';
 
 import '../utils/onboarding_util/topics.dart';
 import '../widgets/apptext.dart';
 import '../widgets/capsule_widget.dart';
-import '../widgets/subwidgets/home_section_country.dart';
-import '../widgets/subwidgets/home_section_geo.dart';
 import '../widgets/subwidgets/home_section_tab.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -58,32 +47,46 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             actions: [
               IconButton(
-                  onPressed: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (context) => const FavoritesScreen()),
-                    // );
-
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FavoritesScreen()));
-                  },
-                  icon: const Icon(
-                    Icons.bookmark_outline,
-                    color: AppColors.blackColor,
-                  )),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const HistoryScreen()),
+                  );
+                },
+                icon: const Icon(
+                  Icons.history_outlined,
+                  color: AppColors.blackColor,
+                )
+              ),
 
               IconButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ProfileScreen()),
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.account_circle_outlined,
-                    color: AppColors.blackColor,
-                  )),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const FavoritesScreen()),
+                  );
+                },
+                icon: const Icon(
+                  Icons.bookmark_outline,
+                  color: AppColors.blackColor,
+                )
+              ),
+
+              IconButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ProfileScreen()),
+                  );
+                },
+                icon: const Icon(
+                  Icons.account_circle_outlined,
+                  color: AppColors.blackColor,
+                )
+              ),
             ],
           ),
           body: SingleChildScrollView(
@@ -123,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
               ),
-              HomeSectionTab(topic: "$tabName"),
+              HomeSectionTab(topic: tabName),
               // const HomeSectionCountry(),
               // const HomeSectionGeo(),
             ],

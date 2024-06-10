@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:highlights/screens/commentsscreen.dart';
 import 'package:highlights/services/firestore.dart';
@@ -8,7 +9,7 @@ import '../utils/helper/date_functions.dart';
 import 'apptext.dart';
 import 'news_webview.dart';
 
-class NewsWidget extends StatelessWidget {
+class NewsWidgetStateful extends StatefulWidget {
   final String title;
   final String subtitle;
   final String publishDate;
@@ -17,7 +18,7 @@ class NewsWidget extends StatelessWidget {
   final bool bookmarked;
   final String guid;
 
-  const NewsWidget({
+  const NewsWidgetStateful({
     required this.title,
     required this.subtitle,
     required this.publishDate,
@@ -26,6 +27,20 @@ class NewsWidget extends StatelessWidget {
     required this.bookmarked,
     required this.guid
   });
+
+  @override
+  State<NewsWidgetStateful> createState() => _NewsWidgetStatefulState();
+}
+
+class _NewsWidgetStatefulState extends State<NewsWidgetStateful> {
+  bool isBookmarked = false;
+
+  @override
+  void initState() {
+    isBookmarked = widget.bookmarked;
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +66,7 @@ class NewsWidget extends StatelessWidget {
                 // ),
 
                 AppText(
-                  text: title,
+                  text: widget.title,
                   fontSize: 16.0,
                   color: Colors.black,
                   maxLines: 4,
@@ -69,7 +84,7 @@ class NewsWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         AppText(
-                          text:  convertToRegularDateFormat(publishDate),
+                          text:  convertToRegularDateFormat(widget.publishDate),
                           fontSize: 12.0,
                           color: AppColors.blackColor.withOpacity(0.5),
                           fontWeight: FontWeight.normal,
@@ -85,7 +100,7 @@ class NewsWidget extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                             ),
                             AppText(
-                              text:  removeHttpsAndCom(author),
+                              text:  removeHttpsAndCom(widget.author),
                               fontSize: 12.0,
                               color: AppColors.blackColor.withOpacity(1),
                               fontWeight: FontWeight.normal,
@@ -99,8 +114,8 @@ class NewsWidget extends StatelessWidget {
 
                     IconButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => CommentsScreen(newsGuid: guid)));
-                        // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CommentsScreen(newsGuid: guid)));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => CommentsScreen(newsGuid: widget.guid)));
+                        // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CommentsScreen(newsGuid: widget.guid)));
                       },
 
                       icon: const Icon(Icons.comment_outlined),
@@ -108,22 +123,26 @@ class NewsWidget extends StatelessWidget {
 
                     IconButton(
                       onPressed: () {
-                        if (bookmarked) {
-                          FirestoreService().deleteFavorite(guid);
+                        if (isBookmarked) {
+                          FirestoreService().deleteFavorite(widget.guid);
                         } else {
                           FirestoreService().addFavorite(
-                            title,
-                            subtitle,
-                            publishDate,
-                            author,
-                            link,
-                            guid
+                            widget.title,
+                            widget.subtitle,
+                            widget.publishDate,
+                            widget.author,
+                            widget.link,
+                            widget.guid
                           );
                         }
+
+                        setState(() {
+                          isBookmarked = !isBookmarked;
+                        });
                       },
 
                       icon: Icon(
-                        (bookmarked) ? Icons.bookmark : Icons.bookmark_outline
+                        (isBookmarked == true) ? Icons.bookmark : Icons.bookmark_outline
                       ),
                     ),
 
@@ -139,17 +158,17 @@ class NewsWidget extends StatelessWidget {
                         onPressed: () {
                           // Add item to news history
                           FirestoreService().addHistory(
-                            title,
-                            subtitle,
-                            publishDate,
-                            author,
-                            link,
-                            guid
+                            widget.title,
+                            widget.subtitle,
+                            widget.publishDate,
+                            widget.author,
+                            widget.link,
+                            widget.guid
                           );
 
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => NewsWebviewApp(newsURL: link,)),
+                            MaterialPageRoute(builder: (context) => NewsWebviewApp(newsURL: widget.link,)),
                           );
                         },
                         child: const AppText(
