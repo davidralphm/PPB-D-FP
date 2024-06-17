@@ -47,7 +47,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             actions: [
               IconButton(
-<<<<<<< HEAD
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -60,21 +59,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: AppColors.blackColor,
                 )
               ),
-=======
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const FavoritesScreen()),
-                    );
-
-                    // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const FavoritesScreen()));
-                  },
-                  icon: const Icon(
-                    Icons.bookmark_outline,
-                    color: AppColors.blackColor,
-                  )),
->>>>>>> d1c1e62fcb2b314eb15a2f7926c8faaee44178f1
 
               IconButton(
                 onPressed: () {

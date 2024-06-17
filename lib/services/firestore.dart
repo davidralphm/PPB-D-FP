@@ -5,10 +5,7 @@ class FirestoreService {
   // Get collection of favorites and comments from database
   final CollectionReference favorites =  FirebaseFirestore.instance.collection('favorites');
   final CollectionReference comments = FirebaseFirestore.instance.collection('comments');
-<<<<<<< HEAD
   final CollectionReference history = FirebaseFirestore.instance.collection('history');
-=======
->>>>>>> d1c1e62fcb2b314eb15a2f7926c8faaee44178f1
 
   // Get current user
   final user = FirebaseAuth.instance.currentUser;
@@ -57,7 +54,6 @@ class FirestoreService {
     return favorites.doc(user?.uid).set(favList);
   }
 
-<<<<<<< HEAD
   // CREATE HISTORY
   Future<void> addHistory(
     String title,
@@ -65,7 +61,8 @@ class FirestoreService {
     String publishDate,
     String author,
     String link,
-    String guid
+    String guid,
+    bool bookmarked
   ) async {
     final doc = await history.doc(user?.uid).get();
     Map<String, dynamic> historyList = {};
@@ -81,7 +78,8 @@ class FirestoreService {
       'subtitle': subtitle,
       'publishDate': publishDate,
       'author': author,
-      'link': link
+      'link': link,
+      'bookmarked': bookmarked
     };
 
     historyList[guid] = newData;
@@ -89,8 +87,6 @@ class FirestoreService {
     return history.doc(user?.uid).set(historyList);
   }
 
-=======
->>>>>>> d1c1e62fcb2b314eb15a2f7926c8faaee44178f1
   // READ COMMENTS
   Stream<QuerySnapshot> getCommentsStream(String newsGuid) {
     final commentStream = comments.where('newsGuid', isEqualTo: newsGuid).orderBy('timestamp').snapshots();
@@ -119,7 +115,6 @@ class FirestoreService {
     return favList;
   }
 
-<<<<<<< HEAD
   // READ HISTORY
   Stream<DocumentSnapshot> getHistoryStream() {
     final historyStream = history.doc(user?.uid).snapshots();
@@ -136,19 +131,40 @@ class FirestoreService {
     return comments.doc(docId).update(newData);
   }
 
-  // DELETE COMMENT
-  Future<void> deleteComment(String docId) {
-    return comments.doc(docId).delete();
-  }
+  // UPDATE HISTORY
+  Future<void> updateHistory(
+    String title,
+    String subtitle,
+    String publishDate,
+    String author,
+    String link,
+    String guid,
+    bool bookmarked
+  ) async {
+    final doc = await history.doc(user?.uid).get();
+    Map<String, dynamic> historyList = {};
 
-=======
-  // UPDATE COMMENT
-  Future<void> updateComment(String docId, String comment) {
-    final Map<String, dynamic> newData = {
-      'comment': comment,
+    try {
+      historyList = doc.data() as Map<String, dynamic>;
+    } catch (e) {
+      print(e.toString());
+    }
+
+    if (!historyList.containsKey(guid))
+      return;
+
+    Map<String, dynamic> newData = {
+      'title': title,
+      'subtitle': subtitle,
+      'publishDate': publishDate,
+      'author': author,
+      'link': link,
+      'bookmarked': bookmarked
     };
 
-    return comments.doc(docId).update(newData);
+    historyList[guid] = newData;
+
+    return history.doc(user?.uid).set(historyList);
   }
 
   // DELETE COMMENT
@@ -156,7 +172,6 @@ class FirestoreService {
     return comments.doc(docId).delete();
   }
 
->>>>>>> d1c1e62fcb2b314eb15a2f7926c8faaee44178f1
   // DELETE FAVORITE
   Future<void> deleteFavorite(String guid) async {
     final doc = await favorites.doc(user?.uid).get();
@@ -172,17 +187,18 @@ class FirestoreService {
 
     favList.remove(guid);
 
-<<<<<<< HEAD
     // print('Removing $guid');
-=======
-    print('Removing $guid');
->>>>>>> d1c1e62fcb2b314eb15a2f7926c8faaee44178f1
 
     return favorites.doc(user?.uid).set(favList);
   }
 
-  // DELETE HISTORY
-  Future<void> deleteHistory(String guid) async {
+  // DELETE ALL HISTORY
+  Future<void> deleteHistory() {
+    return history.doc(user?.uid).delete();
+  }
+
+  // DELETE ONE HISTORY
+  Future<void> deleteSingleHistory(String guid) async {
     final doc = await history.doc(user?.uid).get();
     Map<String, dynamic> historyList = {};
 
@@ -191,9 +207,9 @@ class FirestoreService {
     } catch (e) {
       print(e.toString());
     }
-
+    
     historyList.remove(guid);
 
-    return history.doc(user?.uid).set(historyList);
+    return history.doc(user?.uid).set(historyList); 
   }
 }

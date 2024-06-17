@@ -120,6 +120,16 @@ class NewsWidget extends StatelessWidget {
                             guid
                           );
                         }
+
+                        FirestoreService().updateHistory(
+                          title,
+                          subtitle,
+                          publishDate,
+                          author,
+                          link,
+                          guid,
+                          !bookmarked
+                        );
                       },
 
                       icon: Icon(
@@ -144,7 +154,8 @@ class NewsWidget extends StatelessWidget {
                             publishDate,
                             author,
                             link,
-                            guid
+                            guid,
+                            bookmarked
                           );
 
                           Navigator.push(

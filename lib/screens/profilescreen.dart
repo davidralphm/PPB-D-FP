@@ -63,22 +63,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
 
           ),
-           ListTile(
-            title: AppText(
-              text: "Language",
-              fontSize: 14.0,
-              color: AppColors.blackColor.withOpacity(0.6),
-              overflow: TextOverflow.ellipsis,
-            ),
-            subtitle: const AppText(
-              text: "asd",
-              fontSize: 20.0,
-              color: AppColors.blackColor,
-              overflow: TextOverflow.ellipsis,
-              fontWeight: FontWeight.normal,
-            ),
-
-          ),
 
           const Spacer(),
           const AppText(

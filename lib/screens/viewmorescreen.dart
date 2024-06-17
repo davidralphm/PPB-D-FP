@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:highlights/screens/authscreen.dart';
 import 'package:highlights/services/firestore.dart';
 import 'package:highlights/widgets/news_widget_stateful.dart';
 import 'package:http/http.dart' as http;

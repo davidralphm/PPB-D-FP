@@ -2,8 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:highlights/services/firestore.dart';
 import 'package:highlights/utils/appcolors.dart';
 import 'package:flutter/material.dart';
-import 'package:highlights/widgets/news_widget.dart';
-import 'package:highlights/widgets/news_widget_stateful.dart';
+import 'package:highlights/widgets/history_widget.dart';
 import '../widgets/apptext.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -14,15 +13,8 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
-  Map<String, dynamic> favList = {};
-
-  void loadFavList() async {
-    favList = await FirestoreService().getFavoritesList();
-  }
-
   @override
   void initState() {
-    loadFavList();
     super.initState();
   }
 
@@ -46,6 +38,17 @@ class _HistoryScreenState extends State<HistoryScreen> {
               color: AppColors.blackColor,
               overflow: TextOverflow.ellipsis,
             ),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  FirestoreService().deleteHistory();
+                },
+                icon: const Icon(
+                  Icons.delete_outline,
+                  color: AppColors.blackColor,
+                )
+              ),
+            ],
           ),
           body: 
               StreamBuilder<DocumentSnapshot>(
@@ -69,13 +72,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     return ListView.builder(
                     itemCount: list.length,
                     itemBuilder: (context, index) {
-                      return NewsWidgetStateful(
+                      return HistoryWidget(
                         title: list[index]['title'],
                         subtitle: list[index]['subtitle'],
                         publishDate: list[index]['publishDate'],
                         author: list[index]['author'],
                         link: list[index]['link'],
-                        bookmarked: favList.containsKey(list[index]['guid']),
+                        bookmarked: list[index]['bookmarked'] ?? false,
                         guid: list[index]['guid'],
                       );
                       },

@@ -139,6 +139,16 @@ class _NewsWidgetStatefulState extends State<NewsWidgetStateful> {
                         setState(() {
                           isBookmarked = !isBookmarked;
                         });
+
+                        FirestoreService().updateHistory(
+                          widget.title,
+                          widget.subtitle,
+                          widget.publishDate,
+                          widget.author,
+                          widget.link,
+                          widget.guid,
+                          isBookmarked
+                        );
                       },
 
                       icon: Icon(
@@ -156,7 +166,6 @@ class _NewsWidgetStatefulState extends State<NewsWidgetStateful> {
                       ),
                       child: TextButton(
                         onPressed: () {
-<<<<<<< HEAD
                           // Add item to news history
                           FirestoreService().addHistory(
                             widget.title,
@@ -164,11 +173,10 @@ class _NewsWidgetStatefulState extends State<NewsWidgetStateful> {
                             widget.publishDate,
                             widget.author,
                             widget.link,
-                            widget.guid
+                            widget.guid,
+                            widget.bookmarked
                           );
 
-=======
->>>>>>> d1c1e62fcb2b314eb15a2f7926c8faaee44178f1
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => NewsWebviewApp(newsURL: widget.link,)),
